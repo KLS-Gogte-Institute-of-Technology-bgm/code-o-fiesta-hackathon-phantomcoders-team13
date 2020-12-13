@@ -1,12 +1,15 @@
 #libraries
 import tensorflow as tf
 import tensorflow.keras as K
+from utilities import *
+import plotly.graph_objects as go
 
-tf.compat.v1.disable_v2_behavior()
 print("\n Tensorflow Version: ",tf.__version__)
 
+train, test, img_width, img_height = datasetloader()
+
 #Transfer learning
-input_t = K.Input(shape=(32,32,3))
+input_t = K.Input(shape=(img_width, img_height,3))
 resnet50 = K.applications.ResNet50(include_top=50, weights='imagenet',input_tensor=input_t)
 
 # #To freeze some layers (if needed)
@@ -34,14 +37,36 @@ model.add(K.layers.Dropout(0.5))
 model.add(K.layers.BatchNormalization())
 model.add(K.layers.Dense(10, activation='softmax'))
 
-#weight checkpoints
-check_point = K.callbacks.ModelCheckpoint(filepath="cifar10.h5",monitor="val_acc", mode="max", save_best_only=True,)
+print("\n ---Model Summary---")
+model.summary()
 
 print("\n Model compiling...")
 model.compile(loss='categorical_crossentropy', optimizer=K.optimizers.RMSprop(lr=2e-5), metrics=['accuracy'])
 
 print("\n Training...")
-history = model.fit(x_train, y_train, batch_size=32, epochs=10, verbose=1, validation_data=(x_test, y_test), callbacks=[check_point])
+history = model.fit(
+    train,
+    batch_size=1,
+    epochs=10,
+    validation_data = test,
+    validation_steps = 1,
+    callbacks = [tf.keras.callbacks.EarlyStopping(
+        monitor='val_loss',
+        min_delta=0.01,
+        patience=7
+    )]
 
-print("\n ---Model Summary---")
-model.summary()
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=history.epoch,
+                         y=history.history['accuracy'],
+                         mode='lines+markers',
+                         name='Training accuracy'))
+fig.add_trace(go.Scatter(x=history.epoch,
+                         y=history.history['val_accuracy'],
+                         mode='lines+markers',
+                         name='Validation accuracy'))
+fig.update_layout(title='Accuracy',
+                  xaxis=dict(title='Epoch'),
+                  yaxis=dict(title='Percentage'))
+fig.show()
