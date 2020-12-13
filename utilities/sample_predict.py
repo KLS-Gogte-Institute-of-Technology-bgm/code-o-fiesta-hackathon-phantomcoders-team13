@@ -4,14 +4,12 @@ import tensorflow as tf
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing import image
 
-model = load_model(filepath, compile=True)
-
 def sample_predict():
 
-    img1_path = "./dataset/class1/8"
-    img2_path = "./dataset/class2/240"
-    img3_path = "./dataset/class3/1226"
-    img4_path = "./dataset/class1/8"
+    img1_path = "./dataset/class1/8.jpg"
+    img2_path = "./dataset/class2/240.jpg"
+    img3_path = "./dataset/class3/1226.jpg"
+    img4_path = "./dataset/class1/8.jpg"
     # img5_path = "./dataset/class2/1176"
     # img6_path = "./dataset/class3/1635"
     # img7_path = "./dataset/class1/300"
