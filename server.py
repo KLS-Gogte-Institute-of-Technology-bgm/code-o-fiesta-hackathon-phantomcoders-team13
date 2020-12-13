@@ -14,7 +14,7 @@ import imutils
 import time
 import cv2
 import utility
-
+from utilities.sample_predict import sample_predict
 from utilities.sample_predict import sample_predict
 import matplotlib.pyplot as plt
 import numpy as np
@@ -34,7 +34,7 @@ lock = threading.Lock()
 app = Flask(__name__)
 
 
-# model = tf.keras.models.load_model('.')
+model = tf.keras.models.load_model('.')
 
 qrcode =  ""
 
@@ -86,15 +86,14 @@ def detect_motion(frameCount):
 				# unpack the tuple and draw the box surrounding the
 				# "motion area" on the output frame
 				val, img = cv2.imencode('.jpg', frame)
-				img1 = sample_predict(img)
-				ret = model.predict(img1)
+				# ret = model.predict(img)
 
-				if ret==0:
-					qrcode = utility.qrgen(100)
-				elif ret==1:
-					qrcode = utility.qrgen(200)
-				else:
-					qrcode = utility.qrgen(300)
+				# if ret==0:
+				# 	qrcode = utility.qrgen(100)
+				# elif ret==1:
+				# 	qrcode = utility.qrgen(200)
+				# else:
+				# 	qrcode = utility.qrgen(300)
 					
 					
 				(thresh, (minX, minY, maxX, maxY)) = motion

@@ -8,12 +8,12 @@ def sample_predict(img):
 
     #img_path = "./images/image.jpg"
 
-    img = image.load_img(img, target_size=(180,180))
+    #img = image.load_img(img, target_size=(180,180))
     img_array = image.img_to_array(img)
     img_batch = np.expand_dims(img_array, axis=0)
-    img_preprocessed = preprocess_input(img_batch)
+    #img_preprocessed = preprocess_input(img_batch)
     samples_to_predict=[]
-    samples_to_predict.append(img_preprocessed)
+    samples_to_predict.append(img_batch)
 
     return samples_to_predict
-sample_predict()
+
