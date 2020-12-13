@@ -9,16 +9,16 @@ def sample_predict():
     img1_path = "./dataset/class1/8.jpg"
     img2_path = "./dataset/class2/240.jpg"
     img3_path = "./dataset/class3/1226.jpg"
-    img4_path = "./dataset/class1/8.jpg"
-    # img5_path = "./dataset/class2/1176"
-    # img6_path = "./dataset/class3/1635"
-    # img7_path = "./dataset/class1/300"
+    img4_path = "./dataset/class1/125.jpg"
+    img5_path = "./dataset/class2/1051.jpg"
+    # img6_path = "./dataset/class3/1635.jpg"
+    # img7_path = "./dataset/class1/302.jpg"
 
     img1 = image.load_img(img1_path, target_size=(180,180))
     img2 = image.load_img(img2_path, target_size=(180,180))
     img3 = image.load_img(img3_path, target_size=(180,180))
     img4 = image.load_img(img4_path, target_size=(180,180))
-    # img5 = image.load_img(img5_path, target_size=(180,180))
+    img5 = image.load_img(img5_path, target_size=(180,180))
     # img6 = image.load_img(img6_path, target_size=(180,180))
     # img7 = image.load_img(img7_path, target_size=(180,180))
 
@@ -34,16 +34,31 @@ def sample_predict():
     img4_array = image.img_to_array(img4)
     img4_batch = np.expand_dims(img4_array, axis=0)
 
+    img5_array = image.img_to_array(img5)
+    img5_batch = np.expand_dims(img5_array, axis=0)
+
+    # img6_array = image.img_to_array(img6)
+    # img6_batch = np.expand_dims(img6_array, axis=0)
+    #
+    # img7_array = image.img_to_array(img7)
+    # img7_batch = np.expand_dims(img7_array, axis=0)
+
     img1_preprocessed = preprocess_input(img1_batch)
     img2_preprocessed = preprocess_input(img2_batch)
     img3_preprocessed = preprocess_input(img3_batch)
     img4_preprocessed = preprocess_input(img4_batch)
+    img5_preprocessed = preprocess_input(img5_batch)
+    # img6_preprocessed = preprocess_input(img6_batch)
+    # img7_preprocessed = preprocess_input(img7_batch)
 
     samples_to_predict=[]
     samples_to_predict.append(img1_preprocessed)
     samples_to_predict.append(img2_preprocessed)
     samples_to_predict.append(img3_preprocessed)
     samples_to_predict.append(img4_preprocessed)
+    samples_to_predict.append(img5_preprocessed)
+    # samples_to_predict.append(img6_preprocessed)
+    # samples_to_predict.append(img7_preprocessed)
 
     return samples_to_predict
 sample_predict()
