@@ -70,6 +70,9 @@ def detect_motion(frameCount):
 			if motion is not None:
 				# unpack the tuple and draw the box surrounding the
 				# "motion area" on the output frame
+				val, img = cv2.imencode('.jpg', frame)
+				ret = predict(img)
+					
 				(thresh, (minX, minY, maxX, maxY)) = motion
 				cv2.rectangle(frame, (minX, minY), (maxX, maxY),
 					(0, 0, 255), 2)
@@ -114,6 +117,8 @@ def video_feed():
 	# type (mime type)
 	return Response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
+
+
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
