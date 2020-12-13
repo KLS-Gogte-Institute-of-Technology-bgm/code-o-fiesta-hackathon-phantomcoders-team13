@@ -5,9 +5,10 @@ import tensorflow as tf
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing import image
 
-model = load_model(filepath, compile=True)
+
+model = tf.keras.models.load_model('.')
 
 samples_to_predict = sample_predict()
-from sample in samples_to_predict:
+for sample in samples_to_predict:
     prediction = model.predict(sample)
-    print(prediction)
+    print("class" + str(np.argmax(prediction)+1))
