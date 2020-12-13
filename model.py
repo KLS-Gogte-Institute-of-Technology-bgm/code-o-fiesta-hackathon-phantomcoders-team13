@@ -3,7 +3,7 @@ import tensorflow as tf
 import tensorflow.keras as K
 
 tf.compat.v1.disable_v2_behavior()
-print("\n Tensorflow Version: ",tf.__version__)
+# print("\n Tensorflow Version: ",tf.__version__)
 
 #Transfer learning
 input_t = K.Input(shape=(32,32,3))
