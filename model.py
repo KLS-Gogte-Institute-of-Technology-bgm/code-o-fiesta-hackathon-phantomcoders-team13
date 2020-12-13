@@ -1,8 +1,10 @@
 #libraries
 import tensorflow as tf
 import tensorflow.keras as K
-from utilities import *
+from utilities.datasetloader import *
 import plotly.graph_objects as go
+from keras.models import Model
+
 
 print("\n Tensorflow Version: ",tf.__version__)
 
@@ -10,8 +12,14 @@ train, test, img_width, img_height = datasetloader()
 
 #Transfer learning
 input_t = K.Input(shape=(img_width, img_height,3))
-resnet50 = K.applications.ResNet50(include_top=50, weights='imagenet',input_tensor=input_t)
+resnet50 = K.applications.ResNet50(include_top=False, weights='imagenet',input_tensor=input_t)
+output = resnet50.layers[-1].output
+output = K.layers.Flatten()(output)
+resnet50 = Model(resnet50.input, outputs=output)
+for layer in resnet50.layers: 
+	layer.trainable = False
 
+resnet50.summary()	
 # #To freeze some layers (if needed)
 # for layer in resnet50.layers[:143]:
 #   layer.trainable = False
@@ -35,18 +43,20 @@ model.add(K.layers.BatchNormalization())
 model.add(K.layers.Dense(64, activation='relu'))
 model.add(K.layers.Dropout(0.5))
 model.add(K.layers.BatchNormalization())
-model.add(K.layers.Dense(10, activation='softmax'))
+model.add(K.layers.Dense(3, activation='softmax'))
 
 print("\n ---Model Summary---")
 model.summary()
 
+loss = tf.keras.losses.CategoricalCrossentropy(from_logits = False)
+
 print("\n Model compiling...")
-model.compile(loss='categorical_crossentropy', optimizer=K.optimizers.RMSprop(lr=2e-5), metrics=['accuracy'])
+model.compile(loss=loss, optimizer=K.optimizers.RMSprop(lr=2e-5), metrics=['accuracy'])
 
 print("\n Training...")
 history = model.fit(
     train,
-    batch_size=1,
+    batch_size=16,
     epochs=10,
     validation_data = test,
     validation_steps = 1,
@@ -54,9 +64,9 @@ history = model.fit(
         monitor='val_loss',
         min_delta=0.01,
         patience=7
-    )]
+    )])
 
-
+model.save('.')
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=history.epoch,
                          y=history.history['accuracy'],
@@ -70,3 +80,5 @@ fig.update_layout(title='Accuracy',
                   xaxis=dict(title='Epoch'),
                   yaxis=dict(title='Percentage'))
 fig.show()
+
+

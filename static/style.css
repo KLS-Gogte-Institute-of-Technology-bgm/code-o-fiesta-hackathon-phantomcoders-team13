@@ -1,0 +1,13 @@
+body{
+    background: #ecf0f1;
+}
+h1{
+    color: #f1c40f;
+    font-weight: 1000;
+}
+.row{
+    margin-top: auto;
+    margin: 100px;
+    padding: 10px;
+    align-content: center;
+}

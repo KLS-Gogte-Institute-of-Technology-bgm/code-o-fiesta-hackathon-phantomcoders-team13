@@ -7,13 +7,13 @@ import tensorflow.keras as K
 
 def datasetloader():
     print()
-    batch_size = 1
+    batch_size = 16
     img_height = 180
     img_width = 180
 
     print("Loading dataset...")
-    PATH = '../'
-    path = '../dataset'
+    PATH = './'
+    path = './dataset'
 
     # print(os.listdir(PATH))
     dataset = os.path.join(PATH,'dataset')
@@ -32,9 +32,10 @@ def datasetloader():
 
     train = tf.keras.preprocessing.image_dataset_from_directory(
         dataset,
-        validation_split = 0.1,
+        validation_split = 0.2,
         subset="training",
         seed=123,
+        label_mode='categorical',
         image_size=(img_height, img_width),
         batch_size=batch_size)
 
@@ -42,11 +43,13 @@ def datasetloader():
 
     test = tf.keras.preprocessing.image_dataset_from_directory(
         dataset,
-        validation_split=0.1,
+        validation_split=0.2,
         subset="validation",
         seed=123,
+        label_mode='categorical',
         image_size=(img_height, img_width),
-        batch_size=batch_size)
+        batch_size=batch_size
+        )
 
     print()
     return train, test, img_width, img_height
