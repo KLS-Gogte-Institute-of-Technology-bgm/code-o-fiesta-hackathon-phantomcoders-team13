@@ -15,12 +15,12 @@ import time
 import cv2
 import utility
 
-# from utilities.sample_predict import sample_predict
-# import matplotlib.pyplot as plt
-# import numpy as np
-# import tensorflow as tf
-# from tensorflow.keras.applications.resnet50 import preprocess_input
-# from tensorflow.keras.preprocessing import image
+from utilities.sample_predict import sample_predict
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.preprocessing import image
 
 
 
@@ -86,14 +86,15 @@ def detect_motion(frameCount):
 				# unpack the tuple and draw the box surrounding the
 				# "motion area" on the output frame
 				val, img = cv2.imencode('.jpg', frame)
-				# ret = model.predict(img)
+				img1 = sample_predict(img)
+				ret = model.predict(img1)
 
-				# if ret==0:
-				# 	qrcode = utility.qrgen(100)
-				# elif ret==1:
-				# 	qrcode = utility.qrgen(200)
-				# else:
-				# 	qrcode = utility.qrgen(300)
+				if ret==0:
+					qrcode = utility.qrgen(100)
+				elif ret==1:
+					qrcode = utility.qrgen(200)
+				else:
+					qrcode = utility.qrgen(300)
 					
 					
 				(thresh, (minX, minY, maxX, maxY)) = motion
