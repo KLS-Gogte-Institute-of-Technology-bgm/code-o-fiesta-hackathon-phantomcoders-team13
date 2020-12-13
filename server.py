@@ -88,7 +88,12 @@ def detect_motion(frameCount):
 				val, img = cv2.imencode('.jpg', frame)
 				ret = model.predict(img)
 
-				# if ret==0:
+				if ret==0:
+					qrcode = utility.qrgen(100)
+				elif ret==1:
+					qrcode = utility.qrgen(200)
+				else:
+					qrcode = utility.qrgen(300)
 					
 					
 				(thresh, (minX, minY, maxX, maxY)) = motion
@@ -105,12 +110,7 @@ def detect_motion(frameCount):
 		with lock:
 			outputFrame = frame.copy()
 		
-		if ret==0:
-			qrcode = utility.qrgen(100)
-		elif ret==1:
-			qrcode = utility.qrgen(200)
-		else:
-			qrcode = utility.qrgen(300)
+		
 		
 def generate():
 	# grab global references to the output frame and lock variables
