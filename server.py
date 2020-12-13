@@ -47,7 +47,7 @@ time.sleep(2.0)
 @app.route("/")
 def index():
 	# return the rendered template
-	return render_template("index.html",{"qr":qrcode})
+	return render_template("index.html",qr=qrcode)
 
 def detect_motion(frameCount):
 	# grab global references to the video stream, output frame, and
