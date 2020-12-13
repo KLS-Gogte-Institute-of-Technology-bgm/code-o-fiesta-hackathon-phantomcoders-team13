@@ -4,6 +4,7 @@ import tensorflow.keras as K
 from utilities.datasetloader import *
 import plotly.graph_objects as go
 from keras.models import Model
+import pickle
 
 
 print("\n Tensorflow Version: ",tf.__version__)
@@ -16,10 +17,10 @@ resnet50 = K.applications.ResNet50(include_top=False, weights='imagenet',input_t
 output = resnet50.layers[-1].output
 output = K.layers.Flatten()(output)
 resnet50 = Model(resnet50.input, outputs=output)
-for layer in resnet50.layers: 
+for layer in resnet50.layers:
 	layer.trainable = False
 
-resnet50.summary()	
+resnet50.summary()
 # #To freeze some layers (if needed)
 # for layer in resnet50.layers[:143]:
 #   layer.trainable = False
@@ -67,6 +68,8 @@ history = model.fit(
     )])
 
 model.save('.')
+pickle.dump(model, open('model.pkl','wb'))
+
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=history.epoch,
                          y=history.history['accuracy'],
@@ -80,5 +83,3 @@ fig.update_layout(title='Accuracy',
                   xaxis=dict(title='Epoch'),
                   yaxis=dict(title='Percentage'))
 fig.show()
-
-
