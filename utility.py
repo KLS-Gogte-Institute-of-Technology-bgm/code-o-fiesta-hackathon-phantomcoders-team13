@@ -1,7 +1,7 @@
 import requests
 import json
 
-def function(amount):
+def qrgen(amount):
 	"""
 	Function returns an unrendered QR code in SVG format
 	"""

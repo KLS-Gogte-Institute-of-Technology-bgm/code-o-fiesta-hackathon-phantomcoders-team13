@@ -13,6 +13,16 @@ import datetime
 import imutils
 import time
 import cv2
+import utility
+
+from utilities.sample_predict import sample_predict
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.preprocessing import image
+
+
 
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful for multiple browsers/tabs
@@ -23,6 +33,11 @@ lock = threading.Lock()
 # initialize a flask object
 app = Flask(__name__)
 
+
+model = tf.keras.models.load_model('.')
+
+qrcode =  ""
+
 # initialize the video stream and allow the camera sensor to
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
@@ -32,7 +47,7 @@ time.sleep(2.0)
 @app.route("/")
 def index():
 	# return the rendered template
-	return render_template("index.html")
+	return render_template("index.html",{"qr":qrcode})
 
 def detect_motion(frameCount):
 	# grab global references to the video stream, output frame, and
@@ -71,7 +86,10 @@ def detect_motion(frameCount):
 				# unpack the tuple and draw the box surrounding the
 				# "motion area" on the output frame
 				val, img = cv2.imencode('.jpg', frame)
-				ret = predict(img)
+				ret = model.predict(img)
+
+				# if ret==0:
+					
 					
 				(thresh, (minX, minY, maxX, maxY)) = motion
 				cv2.rectangle(frame, (minX, minY), (maxX, maxY),
@@ -86,6 +104,13 @@ def detect_motion(frameCount):
 		# lock
 		with lock:
 			outputFrame = frame.copy()
+		
+		if ret==0:
+			qrcode = utility.qrgen(100)
+		elif ret==1:
+			qrcode = utility.qrgen(200)
+		else:
+			qrcode = utility.qrgen(300)
 		
 def generate():
 	# grab global references to the output frame and lock variables
@@ -136,17 +161,20 @@ if __name__ == '__main__':
 # release the video stream pointer
 vs.stop()
 
-'''
-@app.post("/predict/image")
-async def predict_api(file: UploadFile = File(...)):
-    # extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
-    # if not extension:
-    #     return "Image must be jpg or png format!"
-    # image = read_imagefile(await file.read())
-    # prediction = predict(image)
 
-    return prediction
-'''
+# @app.post("/predict/image")
+# async def predict_api():
+# 	# extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
+# 	# if not extension:
+# 	#     return "Image must be jpg or png format!"
+# 	# image = read_imagefile(await file.read())
+# 	# prediction = predict(image)
+
+	
+# 	prediction = model.predict(sample)
+	
+# 	return prediction
+
 
 
 
