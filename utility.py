@@ -2,8 +2,9 @@ import requests
 import json
 
 def function(amount):
-	
-
+	"""
+	Function returns an unrendered QR code in SVG format
+	"""
 	headers = {
 	    'Content-type': 'application/json',
 	}
