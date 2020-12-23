@@ -6,9 +6,9 @@ from tensorflow.keras.preprocessing import image
 import cv2 
 
 
-def sample_predict(img):
+def sample_predict(img_path):
 
-    img_path = "./images/image.jpg"
+    
 
     img = image.load_img(img_path, target_size=(180,180))
    # img = cv2.resize(img, (180,180))
@@ -17,6 +17,8 @@ def sample_predict(img):
     img_preprocessed = preprocess_input(img_batch)
     samples_to_predict=[]
     samples_to_predict.append(img_preprocessed)
+
+
 
     return samples_to_predict
 
